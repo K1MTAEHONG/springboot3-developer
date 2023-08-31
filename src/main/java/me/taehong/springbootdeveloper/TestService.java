@@ -12,5 +12,7 @@ public class TestService {
 
     public List<Member> getAllMembers() {
         return memberRepository.findAll();
+
+
     }
 }

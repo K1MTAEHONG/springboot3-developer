@@ -13,7 +13,9 @@ import lombok.NoArgsConstructor;
 
 @Entity
 public class Member {
+
     @Id
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     @Column(name = "id", updatable = false)

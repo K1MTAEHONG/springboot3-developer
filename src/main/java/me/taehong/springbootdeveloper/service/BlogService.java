@@ -1,13 +1,12 @@
 package me.taehong.springbootdeveloper.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import me.taehong.springbootdeveloper.domain.Article;
 import me.taehong.springbootdeveloper.dto.AddArticleRequest;
+import me.taehong.springbootdeveloper.dto.UpdateArticleRequest;
 import me.taehong.springbootdeveloper.repository.BlogRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -34,4 +33,13 @@ public class BlogService {
         blogRepository.deleteById(id);
     }
 
+    @Transactional  //하나의 트랜잭션 으로 묶는역활
+    public Article update(long id, UpdateArticleRequest request){
+        Article article = blogRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("not found:" + id));
+
+        article.update(request.getTitle(), request.getContent());
+
+        return article;
+    }
 }

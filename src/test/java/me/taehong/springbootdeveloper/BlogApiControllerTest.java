@@ -27,8 +27,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+
+@SpringBootTest //테스트용 애플리케이션 컨텍스트
+@AutoConfigureMockMvc   //MockMvc 생성
 class BlogApiControllerTest {
 
     @Autowired
@@ -43,14 +44,13 @@ class BlogApiControllerTest {
     @Autowired
     BlogRepository blogRepository;
 
-    @BeforeEach
-    public void mockMvcSetUp() {
+    @BeforeEach //테스트 실행 전 실행 하는 메서드
+    public void setMockSetUp() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
                 .build();
         blogRepository.deleteAll();
     }
-
-    @DisplayName("addArticle: 블로그 글 추가에 성공한다.")
+    @DisplayName("addArticle: 블로그 글 추가에 성공 한다.")
     @Test
     public void addArticle() throws Exception {
         // given
@@ -76,7 +76,7 @@ class BlogApiControllerTest {
         assertThat(articles.get(0).getContent()).isEqualTo(content);
     }
 
-    @DisplayName("findAllArticles: 블로그 글 목록 조회에 성공한다.")
+    @DisplayName("findAllArticles: 블로그 글 목록 조회에 성공 한다.")
     @Test
     public void findAllArticles() throws Exception {
         // given
@@ -100,7 +100,7 @@ class BlogApiControllerTest {
                 .andExpect(jsonPath("$[0].title").value(title));
     }
 
-    @DisplayName("findArticle: 블로그 글 조회에 성공한다.")
+    @DisplayName("findArticle: 블로그 글 조회에 성공 한다.")
     @Test
     public void findArticle() throws Exception {
         // given
@@ -123,8 +123,7 @@ class BlogApiControllerTest {
                 .andExpect(jsonPath("$.title").value(title));
     }
 
-
-    @DisplayName("deleteArticle: 블로그 글 삭제에 성공한다.")
+    @DisplayName("deleteArticle: 블로그 글 삭제에 성공 한다.")
     @Test
     public void deleteArticle() throws Exception {
         // given
@@ -147,11 +146,10 @@ class BlogApiControllerTest {
         assertThat(articles).isEmpty();
     }
 
-
-    @DisplayName("updateArticle: 블로그 글 수정에 성공한다.")
+    @DisplayName("updateArticle:블로그 글 수정에 성공 한다.")
     @Test
-    public void updateArticle() throws Exception {
-        // given
+    public void updateArticle() throws Exception{
+        //given
         final String url = "/api/articles/{id}";
         final String title = "title";
         final String content = "content";
@@ -164,21 +162,22 @@ class BlogApiControllerTest {
         final String newTitle = "new title";
         final String newContent = "new content";
 
-        UpdateArticleRequest request = new UpdateArticleRequest(newTitle, newContent);
+        UpdateArticleRequest request = new UpdateArticleRequest(newTitle,
+                newContent);
 
-        // when
+        //when
         ResultActions result = mockMvc.perform(put(url, savedArticle.getId())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(request)));
 
-        // then
+        //then
         result.andExpect(status().isOk());
 
         Article article = blogRepository.findById(savedArticle.getId()).get();
 
         assertThat(article.getTitle()).isEqualTo(newTitle);
         assertThat(article.getContent()).isEqualTo(newContent);
+
     }
 
 }
-

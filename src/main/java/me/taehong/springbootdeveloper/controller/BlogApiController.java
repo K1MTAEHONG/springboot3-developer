@@ -48,14 +48,13 @@ public class BlogApiController {
                 .body(new ArticleResponse(article));
     }
 
-    @DeleteMapping("/api/articles/{id}")        //삭제요청이 오면PathVariable 애너테이션을 통해 들어옴
+    @DeleteMapping("/api/articles/{id}")        //삭제 요청이 오면PathVariable 애너테이션을 통해 들어옴
     public ResponseEntity<Void> deleteArticle(@PathVariable long id) {
         blogService.delete(id);
 
         return ResponseEntity.ok()
                 .build();
     }
-
     @PutMapping("/api/articles/{id}")
     public ResponseEntity<Article> updateArticle(@PathVariable long id,
                                                  @RequestBody UpdateArticleRequest request) {

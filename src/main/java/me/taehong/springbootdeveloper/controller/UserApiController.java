@@ -23,7 +23,7 @@ public class UserApiController {
         return "redirect:/login";   // 회원 가입이 완료된 이후에 로그인 페이지로 이동
     }
 
-    @GetMapping("/logout")
+    @GetMapping("/logout")  //로그아웃 매서드 담당 핸들러 Securuty~ 의 logout 매서드 호출
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
         return "redirect:/login";
